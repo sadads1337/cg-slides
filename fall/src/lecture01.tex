@@ -1,6 +1,6 @@
 \documentclass[aspectration=1610,t]{beamer}
 \usepackage{csc}
-\title{Лекция 1. OpenGL - база}
+\title{Лекция 1. OpenGL --- база}
 
 
 \date{
@@ -18,8 +18,8 @@
 \begin{frame}[fragile]{Некоторые вводные}
     Ожидается, что люди, пришедшие на курс:
     \begin{itemize}
-        \item Имеют опыт программирования на языке программирования \langc/\langcpp.
-        \item Способны читать документацию на английском языке.
+        \item имеют опыт программирования на языках \langc/\langcpp.
+        \item способны читать документацию на английском языке.
     \end{itemize}
 \end{frame}
 
@@ -37,7 +37,6 @@
 \end{frame}
 
 \begin{frame}[fragile]{Где искать ответы на вопросы}
-    Список полезных ссылок:
     \begin{itemize}
         \item Вопросы и ответы \url{https://stackoverflow.com}.
         \item Спецификация на \url{https://www.khronos.org/registry/OpenGL/specs/gl/glspec33.core.pdf/}.
@@ -51,9 +50,9 @@
     \begin{itemize}
         \item Все основные функции уже реализованы.
         \item Новые версии только добавляют полезные возможности,
-            не изменяя принципов работы с графическим API.
+            не~изменяя принципов работы с графическим API.
         \item {\bf 3.3}~--- версия, которая запустится на практически 
-            любом графическом ускорители.
+            любом графическом ускорителе.
         \item Дополнительные возможности можно получить с помощью расширений.
     \end{itemize}
 \end{frame}
@@ -61,7 +60,7 @@
 \begin{frame}[fragile]{Расширения OpenGL}
     \begin{itemize}
         \item Производители графических карт могут дополнять функционал графического API.
-        \item Популярные версии, как правило, попадают в новые версии API.
+        \item Популярные, как правило, попадают в новые версии API.
         \item Существует механизм для работы с расширениями в run-time.
             Выглядит это примерно так:
             {\small \begin{lstlisting}
@@ -77,21 +76,21 @@ else {
 
 \begin{frame}[fragile]{Core VS Compatibility}
     \begin{itemize}
-        \item Использование {\bf Core} профиля заставляет нас 
+        \item Использование {\bf Core}-профиля заставляет нас 
             пользоваться современными и актуальными практиками 
             при разработке графических приложений.
-        \item {\bf Compatibility} профиль сохраняет совместимость.
+        \item {\bf Compatibility}-профиль сохраняет совместимость.
     \end{itemize}
     Замечание: на некоторых платформах {\bf Compatibility} 
-    не доступен (например, на платформах Apple)
+    не доступен (например, на платформах Apple).
 \end{frame}
 
 \begin{frame}[fragile]{OpenGL Сontext и его состояние}
     \begin{itemize}
         \item OpenGL по своей сути — это {\bf большой конечный автомат}: набор переменных, 
             определяющий некоторое состояние.
-        \item Перед отрисовкой следующего кадры, мы задаем необходимое {\bf состояние}, 
-            которое говорит OpenGL {\bf как нужно рисовать}.
+        \item Перед отрисовкой следующего кадра мы задаем необходимое {\bf состояние}, 
+            которое говорит OpenGL, {\bf как нужно рисовать}.
         \item Под состоянием графического конвейера обычно имеют ввиду состояние контекста.
     \end{itemize}
 \end{frame}
@@ -99,7 +98,7 @@ else {
 \begin{frame}[fragile]{Основные шаги для отрисовки}
     \begin{itemize}
         \item Подготовливаем сцену (в геометрическом смысле).
-        \item Создаем и заполняем необходимые OpenGL буферы, копируем их в видеопамять.
+        \item Создаем и заполняем необходимые OpenGL-буферы, копируем их в видеопамять.
         \item Задаем необходимое состояние контекста (как рисуем + куда рисуем).
         \item Делаем вызов отрисовки.
         \item {\bf ВАЖНО}: освобождаем не нужные более нам ресурсы.
@@ -111,8 +110,8 @@ else {
     \begin{itemize}
         \item Обновляем объекты в сцене.
         \item Выполняем предварительные вычисления видимости, 
-            т.е. определяем, что попало в сцену, чтобы не рисовать лишние объекты.
-        \item Возможно обрабатываем пользовательские события.
+            т.е.~определяем, что попало в сцену, чтобы не рисовать лишние объекты.
+        \item Возможно, обрабатываем пользовательские события.
         \item \dots
     \end{itemize}
     В результате должны получить набор объектов \langcpp, 
@@ -121,23 +120,20 @@ else {
 
 \begin{frame}[fragile]{Буферы OpenGL}
     \begin{itemize}
-        \item OpenGL преимущественно \langc~-библиотека, 
-            поэтому работа со всеми объектам осуществляется в стиле \langc.
-        \item Создать объект в видеопамяти, значит заполнить некоторую \langc~-структуру,
-            которая в дальнейшем будет записана в видеопамять.
+        \item OpenGL~--- преимущественно \langc~-библиотека, 
+            поэтому работа со~всеми объектам осуществляется в стиле \langc.
+        \item Создать объект в видеопамяти значит заполнить некоторую \langc~-структуру,
+            которая в дальнейшем будет записана в~видеопамять.
     \end{itemize}
 \end{frame}
 
 \begin{frame}[fragile]{Буферы OpenGL}
-    Общая схема работа с объектами в OpenGL выглядит примерно так:
+    Общая схема работа с объектами в OpenGL:
         {\small \begin{lstlisting}
 GLuint object_id = 0;
 glGenObject(1, &object_id);
 glBindObject(object_id);
-glSetObjectStateAndData(
-    GL_TARGET,
-    GL_OPTION_NAME,
-    <option_value>);
+glSetObjectStateOrData(...);
 glBindObject(0);
         \end{lstlisting}}
 \end{frame}
@@ -145,7 +141,7 @@ glBindObject(0);
 \begin{frame}[fragile]{Вершинный буфер}
     \begin{itemize}
         \item Содержит геометрию вершин и их атрибуты.
-        \item По сути - набор байт.
+        \item По сути~--- набор байтов.
         \item Чтобы OpenGL смог их корректно прочитать, нужно задать правильные смещения.
         \item Такие буферы обычно называют {\bf VBO} (Vertex Buffer Object).
     \end{itemize}
@@ -155,7 +151,7 @@ glBindObject(0);
     \begin{itemize}
         \item Зададим геометрию:
             {\small \begin{lstlisting}
-GLfloat vertices[] = { // треугольник из 3-х вершин
+GLfloat vertices[] = { // треугольник из 3 вершин
     -0.5f, -0.5f, 0.0f,
     0.5f, -0.5f, 0.0f,
     0.0f,  0.5f, 0.0f
@@ -189,7 +185,7 @@ glBufferData(GL_ARRAY_BUFFER, sizeof(vertices),
                 \centering
                 \includegraphics[scale=0.45]{vertex_attributes}
             \end{figure}
-        \item Разметка
+        \item Разметка:
             {\small \begin{lstlisting}
 glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE,
                       3 * sizeof(GLfloat), 0);
@@ -206,7 +202,7 @@ glEnableVertexAttribArray(0);
         \item Тип данных~--- GL\_FLOAT.
         \item Нужно ли нормализовать данные.
         \item Размер вершины.
-        \item Смещение от начала бфуера.
+        \item Смещение от начала буфера.
             {\small \begin{lstlisting}
 glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE,
                       3 * sizeof(GLfloat), 0);
@@ -227,7 +223,7 @@ glEnableVertexAttribArray(0);
     \begin{itemize}
         \item Зададим индексы:
             {\small \begin{lstlisting}
-GLuint indices[] = { // треугольник из 3-х вершин
+GLuint indices[] = { // треугольник из 3 вершин
     0, 1, 2
 };
             \end{lstlisting}}
@@ -244,7 +240,7 @@ glBufferData(GL_ELEMENT_ARRAY_BUFFER,
 \end{frame}
 
 \begin{frame}[fragile]{Vertex Array Object}
-    Некоторая обертка позволяющая быстро переиспользовать VBO и IBO.
+    Некоторая обертка, позволяющая быстро переиспользовать VBO~и IBO.
     \begin{figure}[htp]
         \centering
         \includegraphics[scale=0.40]{vao}
@@ -256,8 +252,8 @@ glBufferData(GL_ELEMENT_ARRAY_BUFFER,
         \item Соотвествуют специальным программируемым частям конвейера.
         \item Пишутся на \langc-подобном языке~--- {\bf GLSL}.
         \item Требуют дополнительной компиляции.
-        \item Вершинный шейдер - обрабатывает каждую вершину.
-        \item Фрагментный шейдер - каждый фрагмент (в каком-то смысле пиксель).
+        \item Вершинный шейдер обрабатывает каждую вершину.
+        \item Фрагментный шейдер~--- каждый фрагмент (в каком-то смысле пиксель).
     \end{itemize}
 \end{frame}
 
@@ -315,7 +311,7 @@ glAttachShader(sp, vs);
 glAttachShader(sp, fs);
 glLinkProgram(sp);
     \end{lstlisting}}
-    Замечания: если шейдер не задан, то он заменяется шейдером по умолчанию.
+    Замечание: если шейдер не задан, то он заменяется шейдером по~умолчанию.
 \end{frame}
 
 \begin{frame}[fragile]{Подготовка к отрисовке}
@@ -347,9 +343,9 @@ glBindVertexArray(0);
 
 \begin{frame}[fragile]{Unifroms}
     \begin{itemize}
-        \item Юниформы - некоторые глобальные для всей шейдерной программы переменные.
-        \item Задаются из пользовательского \langcpp кода.
-        \item Используется в шейдере по средствам ключевого слова uniform. Например:
+        \item Юниформы~--- некоторые глобальные для всей шейдерной программы переменные.
+        \item Задаются из пользовательского кода на \langcpp.
+        \item Используются в шейдере при помощи ключевого слова {\bf uniform}. Например:
             {\small \begin{lstlisting}
 #version 330 core
 out vec4 color;
@@ -369,7 +365,9 @@ void main()
     \begin{itemize}
         \item Сначала узнаем расположение:
             {\small \begin{lstlisting}
-GLint color_location = glGetUniformLocation(sp, "u_color");
+GLint color_location;
+color_location = glGetUniformLocation(sp,
+                                      "u_color");
             \end{lstlisting}}
         \item Потом задаем значение:
             {\small \begin{lstlisting}
@@ -382,22 +380,22 @@ glUniform4f(color_location, 1.f, 0.f, 0.f, 1.f);
 \begin{frame}[fragile]{Обработка ошибок}
     \begin{itemize}
         \item Обработка ошибок происходит в стиле \langc.
-        \item Для получение статусов используются функции вида {\bf glGet*iv}. 
-            Например для шейдеров:
+        \item Для получения статусов используются функции вида {\bf glGet*}. 
+            Например, для шейдеров:
             {\small \begin{lstlisting}
 GLint status;
 glGetShaderiv(vs, GL_COMPILE_STATUS, &status);
             \end{lstlisting}}
-        \item Так же существуюет функция {\bf glGetError}, 
+        \item Также существует функция {\bf glGetError}, 
             которая возвращает информацию об ошибках.
     \end{itemize}
 \end{frame}
 
 \begin{frame}[fragile]{Корректное управление ресурсами}
     \begin{itemize}
-        \item Все созданные OpenGL объекты должны быть освобождены вручную (шейдеры, буферы).
-        \item Инициализация объектов должна производится единожды.
-        \item Заполнять и модифицировать эти объекты можно бесконечно-много раз.
+        \item Все созданные OpenGL объекты должны быть освобождены вручную.
+        \item Инициализация объектов должна производиться единожды.
+        \item Заполнять и модифицировать эти объекты можно бесконечно много раз.
         \item Заполнять данные нужно только по мере их изменения.
     \end{itemize}
 \end{frame}
