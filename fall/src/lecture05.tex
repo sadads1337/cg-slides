@@ -1,0 +1,132 @@
+\documentclass[aspectration=1610,t]{beamer}
+\usepackage{csc}
+\title{Лекция 5. Буфер кадра}
+
+
+\date{
+   \textbf{ИТМО}\\
+   12 октября 2022\\
+   Санкт-Петербург
+}
+
+\begin{document}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+\begin{frame}[fragile]{Буфер кадра}
+    Все операции требуют {\bf frame buffer}. Этот буфер может содержать несколько компонент ({\bf attachments}).
+    \begin{itemize}
+        \item {\bf color} - цвет;
+        \item {\bf depth} - глубина;
+        \item {\bf stencil} - трафарет.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{FBO}
+   Создание и использование буфера:
+            {\small \begin{lstlisting}
+int fbo = -1;
+glGenFramebuffers(1, &fbo);
+
+glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+
+// Do smth
+
+glBindFramebuffer(GL_FRAMEBUFFER, 0);
+glDeleteFramebuffers(1, &fbo);
+            \end{lstlisting}}
+    Бывают другие типы FBO (read-only, write-only, read-write).
+\end{frame}
+
+\begin{frame}[fragile]{FBO}
+    Для использования буфера:
+    \begin{itemize}
+        \item Должен быть подключен как минимум один буфер (цвета, глубины или трафарета).
+        \item Должно присутствовать хотя бы одно прикрепление цвета (color attachment).
+        \item Все подключения также должны быть завершенными (обеспечены выделенной памятью).
+        \item Каждый буфер должен иметь одинаковое количество семплов.
+    \end{itemize}
+    Для проверки статуса FBO используют следующую конструкцию:
+    {\small \begin{lstlisting}
+glCheckFramebufferStatus(GL_FRAMEBUFFER)
+    == GL_FRAMEBUFFER_COMPLETE
+    \end{lstlisting}}
+\end{frame}
+
+\begin{frame}[fragile]{Attachments}
+    Типы прикреплений.
+    \begin{itemize}
+        \item {\bf texture} - текстура;
+        \item {\bf renderbuffer} - рендер-буфер.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Texture attachment}
+    Создаем текстуру:
+    {\small \begin{lstlisting}
+int texture;
+glGenTextures(1, &texture);
+glBindTexture(GL_TEXTURE_2D, texture);
+glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 
+    800, 600, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+glTexParameteri(GL_TEXTURE_2D, 
+    GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+glTexParameteri(GL_TEXTURE_2D,
+    GL_TEXTURE_MAG_FILTER, GL_LINEAR);  
+    \end{lstlisting}}
+    Прикрепляем текстуру:
+    {\small \begin{lstlisting}
+glFramebufferTexture2D(GL_FRAMEBUFFER, 
+    GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture, 0);  
+    \end{lstlisting}}
+\end{frame}
+
+\begin{frame}[fragile]{Attachments}
+    Можно прикреплять несколько буферов цвета.
+    \begin{itemize}
+        \item {\bf GL\_COLOR\_ATTACHMENT0};
+        \item {\bf GL\_COLOR\_ATTACHMENT1};
+        \item {\bf ...}
+    \end{itemize}
+    Аналогичным образом можно прикреплять текстуры для буферов глубины и трафарета.
+    \begin{itemize}
+        \item {\bf GL\_DEPTH\_ATTACHMENT};
+        \item {\bf GL\_STENCIL\_ATTACHMENT};
+        \item {\bf GL\_DEPTH\_STENCIL\_ATTACHMENT};
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Texture attachment}
+    Пример комбинированного буфера:
+    {\small \begin{lstlisting}
+glTexImage2D(
+    GL_TEXTURE_2D, 0, GL_DEPTH24_STENCIL8, 
+    800, 600, 0, GL_DEPTH_STENCIL, 
+    GL_UNSIGNED_INT_24_8, NULL);
+    
+glFramebufferTexture2D(GL_FRAMEBUFFER, 
+    GL_DEPTH_STENCIL_ATTACHMENT, 
+    GL_TEXTURE_2D, texture, 0);          
+    \end{lstlisting}}
+\end{frame}
+
+\begin{frame}[fragile]{Renderbuffer attachment}
+    Создание и установка:
+    {\small \begin{lstlisting}
+int rbo;
+glGenRenderbuffers(1, &rbo);
+glBindRenderbuffer(GL_RENDERBUFFER, rbo); 
+glRenderbufferStorage(GL_RENDERBUFFER, 
+    GL_DEPTH24_STENCIL8, 800, 600);        
+    \end{lstlisting}}
+    Подключение:
+    {\small \begin{lstlisting}
+glFramebufferRenderbuffer(GL_FRAMEBUFFER, 
+    GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, rbo); 
+    \end{lstlisting}}
+\end{frame}
+
+\end{document}
+
